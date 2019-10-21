@@ -1,21 +1,40 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.41'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.50' apply false
 }
 
-group 'dev.eternal'
-version '1.0'
+apply from: 'gradle/properties.gradle'
 
-repositories {
-    mavenCentral()
-}
+allprojects {
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-}
+    apply plugin: 'org.jetbrains.kotlin.jvm'
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    group 'dev.eternal'
+    version '1.0'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://dl.bintray.com/michaelbull/maven' }
+    }
+
+    dependencies {
+        implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
+        implementation "com.michael-bull.kotlin-inline-logger:kotlin-inline-logger-jvm:$kotlininlineloggerVersion"
+        implementation "org.slf4j:slf4j-api:$kotlinloggingVersion"
+        implementation "org.slf4j:slf4j-log4j12:$kotlinloggingVersion"
+        implementation "org.koin:koin-core:$koinVersion"
+        implementation "org.koin:koin-core-ext:$koinVersion"
+        implementation "it.unimi.dsi:fastutil:$fastutilVersion"
+
+        testImplementation "org.koin:koin-test:$koinVersion"
+    }
+
+    compileKotlin {
+        kotlinOptions.jvmTarget = "11"
+    }
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "11"
+    }
 }

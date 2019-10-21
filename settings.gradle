@@ -1,2 +1,6 @@
 rootProject.name = 'eternal'
 
+include ':launcher'
+include ':util'
+include ':injector'
+
