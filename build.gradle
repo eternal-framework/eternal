@@ -55,3 +55,7 @@ allprojects {
         kotlinOptions.jvmTarget = "11"
     }
 }
+
+dependencies {
+    testImplementation project(':launcher')
+}
