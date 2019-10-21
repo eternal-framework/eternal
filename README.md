@@ -9,6 +9,8 @@
 		<br>
 		<a href="https://github.com/eternal-framework/eternal/"><img src="https://img.shields.io/badge/revision-184.1-blue" alt="Revision 184.1"></a>
 		<a href="https://discord.gg/CaJBeVB"><img src="https://img.shields.io/discord/635853168688758804?color=738ADB&label=Discord" alt="Join our Discord"></a>
+		<a href="https://travis-ci.org/eternal-framework/eternal"><img src="https://travis-ci.org/eternal-framework/eternal.svg?branch=master" alt="Build Status"></a>
+		
 </p>
 <br>
 <br>
