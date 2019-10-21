@@ -7,9 +7,13 @@ apply from: 'gradle/properties.gradle'
 allprojects {
 
     apply plugin: 'org.jetbrains.kotlin.jvm'
+    apply plugin: 'idea'
 
     group 'dev.eternal'
     version '1.0'
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
 
     repositories {
         mavenCentral()
@@ -29,6 +33,19 @@ allprojects {
         implementation "it.unimi.dsi:fastutil:$fastutilVersion"
 
         testImplementation "org.koin:koin-test:$koinVersion"
+    }
+
+    idea {
+        module {
+            inheritOutputDirs = false
+            outputDir = file("${project.buildDir}/classes/kotlin/main")
+            testOutputDir = file("${project.buildDir}/classes/kotlin/test")
+        }
+    }
+
+    sourceSets {
+        main.kotlin.srcDirs = ['src/main/kotlin']
+        main.resources.srcDirs = ['src/main/resources']
     }
 
     compileKotlin {

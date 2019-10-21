@@ -1,8 +1,11 @@
 package dev.eternal.launcher
 
+import dev.eternal.engine.Engine
 import dev.eternal.injector.Injector
 import dev.eternal.launcher.check.CheckStore
+import dev.eternal.util.Injectable
 import dev.eternal.util.Server.logger
+import org.koin.core.inject
 
 /**
  * Launches the server and required dependency injector.
@@ -10,7 +13,7 @@ import dev.eternal.util.Server.logger
  * @author Cody Fullen
  */
 
-object Launcher {
+object Launcher : Injectable {
 
     /**
      * Static entry method.
@@ -24,6 +27,8 @@ object Launcher {
         this.startInjector()
 
         this.runStartupChecks()
+
+        this.startEngine()
     }
 
     /**
@@ -47,6 +52,18 @@ object Launcher {
     private fun runStartupChecks() {
         val checkStore = CheckStore()
         checkStore.runAllChecks()
+    }
+
+    /**
+     * Initializes the game engine.
+     */
+    private fun startEngine() {
+        /**
+         * Dependency injected [Engine] singleton.
+         */
+        val engine: Engine by inject()
+
+        engine.init()
     }
 
 }

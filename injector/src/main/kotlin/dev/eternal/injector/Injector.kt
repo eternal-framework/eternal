@@ -24,7 +24,8 @@ class Injector {
          * The global module set.
          */
         val global_apps = arrayOf(
-            app_module
+            app_module,
+            engine_module
         )
     }
 }

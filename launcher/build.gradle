@@ -1,4 +1,5 @@
 dependencies {
     implementation project(':util')
     implementation project(':injector')
+    implementation project(':engine')
 }
