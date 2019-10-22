@@ -24,18 +24,18 @@ allprojects {
 
     dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        compile "com.michael-bull.kotlin-inline-logger:kotlin-inline-logger-jvm:$kotlininlineloggerVersion"
+        compile "org.slf4j:slf4j-api:$kotlinloggingVersion"
+        compile "org.slf4j:slf4j-log4j12:$kotlinloggingVersion"
+        compile "org.koin:koin-core:$koinVersion"
+        compile "org.koin:koin-core-ext:$koinVersion"
+        compile "it.unimi.dsi:fastutil:$fastutilVersion"
+        compile "com.uchuhimo:konf-core:$konfVersion"
+        compile "com.uchuhimo:konf-yaml:$konfVersion"
+        compile "io.netty:netty-all:$nettyVersion"
+        compile "com.google.guava:guava:$guavaVersion"
 
-        implementation "com.michael-bull.kotlin-inline-logger:kotlin-inline-logger-jvm:$kotlininlineloggerVersion"
-        implementation "org.slf4j:slf4j-api:$kotlinloggingVersion"
-        implementation "org.slf4j:slf4j-log4j12:$kotlinloggingVersion"
-        implementation "org.koin:koin-core:$koinVersion"
-        implementation "org.koin:koin-core-ext:$koinVersion"
-        implementation "it.unimi.dsi:fastutil:$fastutilVersion"
-        implementation "com.uchuhimo:konf-core:$konfVersion"
-        implementation "com.uchuhimo:konf-yaml:$konfVersion"
-        implementation "com.uchuhimo:konf-xml:$konfVersion"
-
-        testImplementation "org.koin:koin-test:$koinVersion"
+        testCompile "org.koin:koin-test:$koinVersion"
     }
 
     idea {

@@ -11,4 +11,5 @@ dependencies {
     compile project(':injector')
     compile project(':engine')
     compile project(':config')
+    compile project(':net')
 }

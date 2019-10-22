@@ -1,12 +1,17 @@
 package dev.eternal.launcher
 
 import dev.eternal.config.Conf
+import dev.eternal.config.impl.ServerConfig
 import dev.eternal.engine.Engine
 import dev.eternal.injector.Injector
 import dev.eternal.launcher.check.CheckStore
+import dev.eternal.net.NetworkServer
 import dev.eternal.util.Injectable
 import dev.eternal.util.Server.logger
+import io.netty.channel.ChannelFuture
 import org.koin.core.inject
+import org.koin.core.parameter.parametersOf
+import java.net.InetSocketAddress
 
 /**
  * Launches the server and required dependency injector.
@@ -15,6 +20,13 @@ import org.koin.core.inject
  */
 
 object Launcher : Injectable {
+
+    /**
+     * Loaded values from the [Engine] instance.
+     */
+    private var serverName: String = ""
+    private var revision: Int = -1
+    private lateinit var address: InetSocketAddress
 
     /**
      * Static entry method.
@@ -32,6 +44,13 @@ object Launcher : Injectable {
         this.loadConfigs()
 
         this.startEngine()
+
+        this.startNetwork().addListener {
+            if(it.isDone) {
+                logger.info { "$serverName server startup completed. Running OSRS revision $revision." }
+                logger.info { "Listening on ${address.hostString}:${address.port} for connections..." }
+            }
+        }
     }
 
     /**
@@ -76,9 +95,30 @@ object Launcher : Injectable {
         /**
          * Dependency injected [Engine] singleton.
          */
-        val engine: Engine = inject<Engine>().value
-
+        val engine: Engine by inject()
         engine.init()
+
+        this.serverName = engine.serverName
+        this.revision = engine.revision
+    }
+
+    /**
+     * Starts the network server.
+     */
+    private fun startNetwork(): ChannelFuture {
+        val listenAddress = Conf.SERVER[ServerConfig.address]
+        val listenPort = Conf.SERVER[ServerConfig.port]
+
+        this.address = InetSocketAddress(listenAddress, listenPort)
+
+        /**
+         * Lazy injection of [NetworkServer]. Pipes the address as a parameter.
+         */
+        val networkServer: NetworkServer by inject { parametersOf(address) }
+
+        networkServer.start()
+
+        return networkServer.future
     }
 
 }

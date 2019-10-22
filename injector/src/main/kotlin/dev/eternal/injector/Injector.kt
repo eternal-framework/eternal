@@ -23,7 +23,8 @@ class Injector {
          */
         val global_apps = listOf(
             app_module,
-            engine_module
+            engine_module,
+            network_module
         )
     }
 }
