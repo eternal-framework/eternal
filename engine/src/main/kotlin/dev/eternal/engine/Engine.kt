@@ -1,5 +1,7 @@
 package dev.eternal.engine
 
+import dev.eternal.config.Conf
+import dev.eternal.config.impl.ServerConfig
 import dev.eternal.util.Injectable
 import dev.eternal.util.Server.logger
 
@@ -11,10 +13,29 @@ import dev.eternal.util.Server.logger
 class Engine : Injectable {
 
     /**
+     * The server name loaded from the config.
+     */
+    val serverName: String = Conf.SERVER[ServerConfig.server_name]
+
+    /**
+     * The current running engine revision.
+     */
+    val revision: Int = Conf.SERVER[ServerConfig.revision]
+
+    /**
      * Initializes the engine.
      */
     fun init() {
         logger.info { "Initializing game engine." }
+
+        this.postInit()
+    }
+
+    /**
+     * Invoked after the [Engine] has finished initializing.
+     */
+    private fun postInit() {
+        logger.info { "$serverName is running OSRS revision $revision." }
     }
 
     /**
