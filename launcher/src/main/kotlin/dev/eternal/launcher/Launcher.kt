@@ -1,5 +1,6 @@
 package dev.eternal.launcher
 
+import dev.eternal.config.Conf
 import dev.eternal.engine.Engine
 import dev.eternal.injector.Injector
 import dev.eternal.launcher.check.CheckStore
@@ -28,6 +29,8 @@ object Launcher : Injectable {
 
         this.runStartupChecks()
 
+        this.loadConfigs()
+
         this.startEngine()
     }
 
@@ -55,13 +58,25 @@ object Launcher : Injectable {
     }
 
     /**
+     * Loads the base configs required for server startup.
+     */
+    private fun loadConfigs() {
+        /**
+         * Load the server config
+         */
+        Conf.SERVER.loadFile()
+
+        logger.info { "Finished loading all config files." }
+    }
+
+    /**
      * Initializes the game engine.
      */
     private fun startEngine() {
         /**
          * Dependency injected [Engine] singleton.
          */
-        val engine: Engine by inject()
+        val engine: Engine = inject<Engine>().value
 
         engine.init()
     }

@@ -14,16 +14,14 @@ class Injector {
      * Starts the koin framework injector.
      */
     fun start() {
-        startKoin {
-            global_apps
-        }
+        startKoin { modules(global_apps) }
     }
 
     companion object {
         /**
          * The global module set.
          */
-        val global_apps = arrayOf(
+        val global_apps = listOf(
             app_module,
             engine_module
         )

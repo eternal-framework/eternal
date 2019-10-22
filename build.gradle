@@ -31,6 +31,9 @@ allprojects {
         implementation "org.koin:koin-core:$koinVersion"
         implementation "org.koin:koin-core-ext:$koinVersion"
         implementation "it.unimi.dsi:fastutil:$fastutilVersion"
+        implementation "com.uchuhimo:konf-core:$konfVersion"
+        implementation "com.uchuhimo:konf-yaml:$konfVersion"
+        implementation "com.uchuhimo:konf-xml:$konfVersion"
 
         testImplementation "org.koin:koin-test:$koinVersion"
     }

@@ -4,4 +4,5 @@ include ':launcher'
 include ':util'
 include ':injector'
 include ':engine'
+include ':config'
 

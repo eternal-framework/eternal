@@ -1,5 +1,14 @@
+apply plugin: 'application'
+
+mainClassName = 'dev.eternal.launcher.Launcher'
+
+run {
+    workingDir = rootProject.projectDir
+}
+
 dependencies {
-    implementation project(':util')
-    implementation project(':injector')
-    implementation project(':engine')
+    compile project(':util')
+    compile project(':injector')
+    compile project(':engine')
+    compile project(':config')
 }
