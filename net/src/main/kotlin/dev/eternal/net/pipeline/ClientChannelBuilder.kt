@@ -1,10 +1,12 @@
 package dev.eternal.net.pipeline
 
+import dev.eternal.util.Injectable
 import io.netty.channel.ChannelInitializer
 import io.netty.channel.socket.SocketChannel
 import io.netty.handler.timeout.IdleStateHandler
 import io.netty.handler.traffic.ChannelTrafficShapingHandler
 import io.netty.handler.traffic.GlobalTrafficShapingHandler
+import org.koin.core.inject
 import java.util.concurrent.Executors
 
 /**
@@ -13,7 +15,7 @@ import java.util.concurrent.Executors
  *
  * @author Cody Fullen
  */
-class ClientChannelBuilder : ChannelInitializer<SocketChannel>() {
+class ClientChannelBuilder : ChannelInitializer<SocketChannel>(), Injectable {
 
     /**
      * The global traffic shaper is responsible for rate-limiting traffic across the entire
@@ -45,7 +47,10 @@ class ClientChannelBuilder : ChannelInitializer<SocketChannel>() {
          */
         val timeout = IdleStateHandler(0, 30, 1000)
 
-        val handler = null
+        /**
+         * The injector created by the dependency injector.
+         */
+        val handler: ClientChannelHandler by inject()
 
         val p = ch.pipeline()
 

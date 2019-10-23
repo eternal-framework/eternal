@@ -3,8 +3,11 @@ package dev.eternal.net
 import dev.eternal.config.Conf
 import dev.eternal.config.impl.ServerConfig
 import dev.eternal.net.pipeline.ClientChannelBuilder
+import dev.eternal.net.session.Session
 import dev.eternal.util.Server.logger
 import io.netty.channel.ChannelFuture
+import io.netty.channel.ChannelHandlerContext
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import org.koin.core.inject
 import java.net.InetSocketAddress
 
@@ -14,6 +17,11 @@ import java.net.InetSocketAddress
  * @author Cody Fullen
  */
 class NetworkServer(override val address: InetSocketAddress) : SocketServer(address) {
+
+    /**
+     * A storage of open / active [Session]s
+     */
+    private val activeSessions = ObjectOpenHashSet<Session>()
 
     /**
      * The private state tracker.
@@ -80,6 +88,29 @@ class NetworkServer(override val address: InetSocketAddress) : SocketServer(addr
         if(Conf.SERVER[ServerConfig.debug]) {
             cause.printStackTrace()
         }
+    }
+
+    /**
+     * Creates and stores a new session from the [ChannelHandlerContext] instance.
+     *
+     * @param ctx the [ChannelHandlerContext] from the channel.
+     *
+     * @return [Session] The newly created session instance.
+     */
+    internal fun newSession(ctx: ChannelHandlerContext): Session {
+        val newSession = Session(ctx)
+        activeSessions.add(newSession)
+        return newSession
+    }
+
+    /**
+     * Removes a session from the store.
+     *
+     * @param session The [Session] instance to remove.
+     */
+    internal fun terminateSession(session: Session) {
+        session.close()
+        activeSessions.remove(session)
     }
 
     /**
