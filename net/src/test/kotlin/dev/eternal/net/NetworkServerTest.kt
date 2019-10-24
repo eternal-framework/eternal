@@ -1,8 +1,13 @@
 package dev.eternal.net
 
 import dev.eternal.net.pipeline.ClientChannelBuilder
+import dev.eternal.net.session.Session
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
+import io.netty.channel.Channel
 import io.netty.channel.ChannelFuture
+import io.netty.channel.ChannelHandlerContext
 import org.junit.After
 import org.junit.Assert
 import org.junit.Test
@@ -24,6 +29,8 @@ class NetworkServerTest : KoinTest {
     val server: NetworkServer by inject { parametersOf(addr) }
 
     val future = mockk<ChannelFuture>()
+    val ctx = mockk<ChannelHandlerContext>()
+    val channel = mockk<Channel>()
 
     @Before
     fun before() {
@@ -83,13 +90,25 @@ class NetworkServerTest : KoinTest {
 
     @Test
     fun `newSession$net`() {
+        val session: Session? = server.newSession(ctx)
+        assertNotNull(session)
     }
 
     @Test
     fun `terminateSession$net`() {
+        every { ctx.channel() } returns channel
+        every { channel.isActive } returns true
+        every { channel.close() } answers { future }
+
+        val session: Session? = server.newSession(ctx)
+        if (session != null) {
+            server.terminateSession(session)
+            verify { channel.close() }
+        }
     }
 
     @Test
     fun getAddress() {
+        assertEquals("0.0.0.0", addr.hostString)
     }
 }
