@@ -4,7 +4,6 @@ import dev.eternal.launcher.check.impl.CacheCheck
 import dev.eternal.launcher.check.impl.DirectoryCheck
 import dev.eternal.launcher.check.impl.XteasCheck
 import dev.eternal.util.Server.logger
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import kotlin.system.exitProcess
 
 /**
@@ -14,7 +13,7 @@ import kotlin.system.exitProcess
  */
 class CheckStore {
 
-    private val checks = ObjectOpenHashSet<Check>()
+    private val checks = mutableListOf<Check>()
 
     /**
      * Load the checks manually upon instance creation.
