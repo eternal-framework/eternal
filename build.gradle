@@ -37,6 +37,7 @@ allprojects {
         compile "com.github.runelite.runelite:cache:$runeliteVersion"
 
         testCompile "org.koin:koin-test:$koinVersion"
+        testCompile "io.mockk:mockk:$mockkVersion"
     }
 
     idea {

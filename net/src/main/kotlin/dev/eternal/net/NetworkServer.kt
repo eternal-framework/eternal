@@ -41,7 +41,7 @@ class NetworkServer(override val address: InetSocketAddress) : SocketServer(addr
     /**
      * The channel future after starting.
      */
-    lateinit var future: ChannelFuture
+    var future: ChannelFuture? = null
 
     /**
      * Starts the network server.
