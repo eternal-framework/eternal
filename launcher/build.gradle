@@ -12,4 +12,5 @@ dependencies {
     compile project(':engine')
     compile project(':config')
     compile project(':net')
+    compile project(':api')
 }

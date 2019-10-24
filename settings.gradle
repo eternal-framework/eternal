@@ -6,4 +6,5 @@ include ':injector'
 include ':engine'
 include ':config'
 include ':net'
+include ':api'
 

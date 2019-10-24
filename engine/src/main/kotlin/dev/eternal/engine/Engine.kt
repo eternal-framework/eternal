@@ -15,22 +15,22 @@ import java.util.concurrent.TimeUnit
  *
  * @author Cody Fullen
  */
-class Engine : Injectable {
+class Engine : dev.eternal.api.Engine, Injectable {
 
     /**
      * The server name loaded from the config.
      */
-    val serverName: String = Conf.SERVER[ServerConfig.server_name]
+    override val serverName: String = Conf.SERVER[ServerConfig.server_name]
 
     /**
      * The current running engine revision.
      */
-    val revision: Int = Conf.SERVER[ServerConfig.revision]
+    override val revision: Int = Conf.SERVER[ServerConfig.revision]
 
     /**
      * The cache [Store] object.
      */
-    val cachestore: Store = Store(File(PathConstants.CACHE_FOLDER_PATH))
+    override val cachestore: Store = Store(File(PathConstants.CACHE_FOLDER_PATH))
 
     /**
      * Initializes the engine.
@@ -54,7 +54,7 @@ class Engine : Injectable {
      * Removes references from memory and attempts to save any
      * persistable data in memory.
      */
-    fun terminate() {
+    override fun terminate() {
         logger.info { "Terminating game engine." }
     }
 

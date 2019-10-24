@@ -1,4 +1,5 @@
 dependencies {
+    api project(':api')
     implementation project(':util')
     implementation project(':config')
 }

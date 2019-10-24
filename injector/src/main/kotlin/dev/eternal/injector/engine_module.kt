@@ -9,5 +9,5 @@ import org.koin.dsl.module
  
 val engine_module = module {
     // Engine Singleton
-    single { Engine() }
+    single<dev.eternal.api.Engine> { Engine() }
 }
