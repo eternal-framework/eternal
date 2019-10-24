@@ -11,6 +11,8 @@
 		<a href="https://discord.gg/CaJBeVB"><img src="https://img.shields.io/discord/635853168688758804?color=738ADB&label=Discord" alt="Join our Discord"></a>
 		<a href="https://travis-ci.org/eternal-framework/eternal"><img src="https://travis-ci.org/eternal-framework/eternal.svg?branch=master" alt="Build Status"></a>
 		<a href="https://codebeat.co/projects/github-com-eternal-framework-eternal-master"><img alt="codebeat badge" src="https://codebeat.co/badges/8dd40cde-87fa-4d13-8bde-2359df0fbb53" /></a>
+		<a href="https://codecov.io/gh/eternal-framework/eternal"><img src="https://codecov.io/gh/eternal-framework/eternal/branch/master/graph/badge.svg" alt="Code Coverage"></a>
+		<a href="https://kotlinlang.org"><img src="https://img.shields.io/badge/built%20with-kotlin-orange" alt="Kotlin Lang"></a>
 </p>
 <br>
 <br>
