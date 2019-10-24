@@ -7,4 +7,5 @@ ext {
     konfVersion = '0.20.0'
     nettyVersion = '4.1.42.Final'
     guavaVersion = '28.1-jre'
+    runeliteVersion = 'runelite-parent-1.5.36'
 }
