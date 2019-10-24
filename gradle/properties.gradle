@@ -10,4 +10,5 @@ ext {
     runeliteVersion = 'runelite-parent-1.5.36'
     mockkVersion = '1.9.3'
     junitVersion = '4.11'
+    bouncycastleVersion = '1.64'
 }

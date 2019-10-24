@@ -36,6 +36,7 @@ allprojects {
         compile "io.netty:netty-all:$nettyVersion"
         compile "com.google.guava:guava:$guavaVersion"
         compile "com.github.runelite.runelite:cache:$runeliteVersion"
+        compile "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion"
 
         testCompile "org.koin:koin-test:$koinVersion"
         testCompile "io.mockk:mockk:$mockkVersion"
