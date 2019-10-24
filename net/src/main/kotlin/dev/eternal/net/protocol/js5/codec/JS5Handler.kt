@@ -10,6 +10,7 @@ import dev.eternal.net.protocol.js5.packet.JS5StatusResponse
 import dev.eternal.net.session.Session
 import dev.eternal.util.Injectable
 import dev.eternal.util.Server.logger
+import io.netty.channel.ChannelFutureListener
 import net.runelite.cache.fs.Container
 import net.runelite.cache.fs.Store
 import net.runelite.cache.fs.jagex.CompressionType
@@ -46,12 +47,13 @@ object JS5Handler : Injectable {
         /**
          * If the engine revision does NOT match the client, send the
          * StatusType with status of REVISION_MISMATCH.
+         * Close the channel upon sending the status.
          */
         return if(request.revision != engine.revision) {
             logger.info { "Session ${session.uuid} rejected JS5 request due to REVISION_MISMATCH." }
 
             val response = JS5StatusResponse(StatusType.REVISION_MISMATCH)
-            session.writeAndFlush(response)
+            session.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
 
             false
         } else {
