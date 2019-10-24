@@ -50,7 +50,7 @@ class CheckStore {
      *
      * @param check The [Check] instance.
      */
-    private fun addCheck(check: Check) = checks.add(check)
+    internal fun addCheck(check: Check) = checks.add(check)
 
     /**
      * Runs a [Check]'s logic and gets the return.
@@ -58,7 +58,7 @@ class CheckStore {
      *
      * @param check The check to run.
      */
-    private fun runCheck(check: Check): Boolean {
+    internal fun runCheck(check: Check): Boolean {
         val result = check.check()
         return if(!result) {
             if(check is CheckAction) {
