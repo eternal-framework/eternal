@@ -22,4 +22,13 @@ object PathConstants {
      */
     const val XTEAS_FILE_PATH = "data/xteas/xteas.json"
 
+    /**
+     * The location of the RSA private key file.
+     */
+    const val RSA_PRIVATE_KEY_PATH = "data/rsa/private.key"
+
+    /**
+     * The location of the RSA modulus.tx file
+     */
+    const val RSA_MODULUS_PATH = "data/rsa/modulus.txt"
 }

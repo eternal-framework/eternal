@@ -3,6 +3,7 @@ package dev.eternal.engine
 import com.google.common.base.Stopwatch
 import dev.eternal.config.Conf
 import dev.eternal.config.impl.ServerConfig
+import dev.eternal.engine.module.ModuleStore
 import dev.eternal.engine.service.ServiceManager
 import dev.eternal.util.Injectable
 import dev.eternal.util.PathConstants
@@ -40,12 +41,19 @@ class Engine : dev.eternal.api.Engine, Injectable {
     val services: ServiceManager by inject()
 
     /**
+     * The module store.
+     */
+    val modules: ModuleStore by inject()
+
+    /**
      * Initializes the engine.
      */
     fun init() {
         logger.info { "Initializing game engine." }
 
         this.loadCacheStore()
+
+        this.initModules()
 
         this.startServices()
 
@@ -76,6 +84,19 @@ class Engine : dev.eternal.api.Engine, Injectable {
         cachestore.load()
         stopwatch.stop()
         logger.info { "Finished loading cache store in ${stopwatch.elapsed(TimeUnit.MILLISECONDS)}ms." }
+    }
+
+    /**
+     * Initializes all modules in the [ModuleStore]
+     */
+    private fun initModules() {
+        logger.info { "Preparing to initialize modules..." }
+
+        modules.forEach { module ->
+            module.init()
+        }
+
+        logger.info { "Finished initializing ${modules.count()} modules." }
     }
 
     /**
