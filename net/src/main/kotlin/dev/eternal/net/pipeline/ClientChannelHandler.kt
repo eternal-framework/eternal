@@ -1,5 +1,6 @@
 package dev.eternal.net.pipeline
 
+import dev.eternal.engine.net.Packet
 import dev.eternal.net.NetworkServer
 import dev.eternal.net.session.Session
 import dev.eternal.util.Server.logger
@@ -41,7 +42,11 @@ class ClientChannelHandler(private val networkServer: NetworkServer) : ChannelIn
     /**
      * Invoked when the server receives in inbound message. (After its been decoded.)
      */
-    override fun channelRead(ctx: ChannelHandlerContext, msg: Any) = session.get().onMessageReceived(msg)
+    override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
+        if(msg is Packet) {
+            session.get().onMessageReceived(msg)
+        }
+    }
 
     /**
      * Invoked when an exception is thrown in the channel thread.
