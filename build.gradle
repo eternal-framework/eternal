@@ -8,6 +8,7 @@ allprojects {
 
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'idea'
+    apply plugin: 'jacoco'
 
     group 'dev.eternal'
     version '1.0'
@@ -58,6 +59,13 @@ allprojects {
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "11"
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+            html.enabled false
+        }
     }
 }
 
