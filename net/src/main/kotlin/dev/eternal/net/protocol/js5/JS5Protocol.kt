@@ -6,6 +6,7 @@ import dev.eternal.net.protocol.js5.codec.JS5Decoder
 import dev.eternal.net.protocol.js5.codec.JS5Encoder
 import dev.eternal.net.protocol.js5.codec.JS5Handler
 import dev.eternal.net.protocol.js5.packet.JS5CacheRequest
+import dev.eternal.net.protocol.js5.packet.JS5CacheResponse
 import dev.eternal.net.protocol.js5.packet.JS5RevisionRequest
 import dev.eternal.net.protocol.js5.packet.JS5StatusResponse
 import dev.eternal.net.session.Session
@@ -39,6 +40,7 @@ class JS5Protocol : Protocol() {
     override fun encode(session: Session, packet: Packet, out: ByteBuf) {
         when(packet) {
             is JS5StatusResponse -> JS5Encoder.encodeStatusResponse(packet, out)
+            is JS5CacheResponse -> JS5Encoder.encodeCacheResponse(packet, out)
             else -> logger.warn { "Unhandled JS5Protocol packet ${packet::class.java.simpleName}." }
         }
     }
