@@ -118,7 +118,7 @@ object Launcher : Injectable {
 
         networkServer.start()
 
-        return networkServer.future
+        return networkServer.future!!
     }
 
 }

@@ -1,14 +1,14 @@
 package dev.eternal.net
 
 import dev.eternal.net.pipeline.ClientChannelBuilder
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import io.netty.channel.ChannelFuture
 import org.junit.After
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
+
+import org.junit.Assert.*
+import org.junit.Before
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.parameter.parametersOf
@@ -19,19 +19,18 @@ import java.net.InetSocketAddress
 
 class NetworkServerTest : KoinTest {
 
-    val addr = InetSocketAddress("0.0.0.0", 12345)
+    private val addr = InetSocketAddress("0.0.0.0", 12345)
+
     val server: NetworkServer by inject { parametersOf(addr) }
+
     val future = mockk<ChannelFuture>()
-    val handler: ClientChannelBuilder by inject()
 
     @Before
     fun before() {
-        startKoin {
-            modules(module {
-                single { (addr: InetSocketAddress) -> NetworkServer(addr) }
-                single { ClientChannelBuilder() }
-            })
-        }
+        startKoin { modules(module {
+            single { (addr: InetSocketAddress) -> NetworkServer(addr)  }
+            single { ClientChannelBuilder() }
+        })}
     }
 
     @After
@@ -40,17 +39,57 @@ class NetworkServerTest : KoinTest {
     }
 
     @Test
-    fun `START and STOP server`() {
-        server.start()
-        Assert.assertNotNull(server.future)
-        Assert.assertTrue(server.isStarting)
+    fun isRunning() {
+        assertFalse(server.isRunning)
+    }
 
-        server.future?.addListener { f ->
-            if(f.isDone) {
-                Assert.assertTrue(server.isRunning)
-                server.stop()
-                Assert.assertFalse(server.isRunning)
-            }
-        }
+    @Test
+    fun isStarting() {
+        assertFalse(server.isStarting)
+    }
+
+    @Test
+    fun getFuture() {
+        assertNull(server.future)
+    }
+
+    @Test
+    fun setFuture() {
+        server.future = future
+        assertEquals(server.future, future)
+    }
+
+    @Test
+    fun start() {
+        server.start()
+        assertTrue(server.isStarting)
+    }
+
+    @Test(expected = IllegalStateException::class)
+    fun stop() {
+        server.stop()
+    }
+
+    @Test
+    fun `onBindSuccess$net`() {
+        server.onBindSuccess()
+    }
+
+    @Test
+    fun `onBindFailure$net`() {
+        val cause = Exception("This is a test throwable")
+        server.onBindFailure(cause)
+    }
+
+    @Test
+    fun `newSession$net`() {
+    }
+
+    @Test
+    fun `terminateSession$net`() {
+    }
+
+    @Test
+    fun getAddress() {
     }
 }
