@@ -1,5 +1,6 @@
 package dev.eternal.launcher
 
+import dev.eternal.api.Eternal
 import dev.eternal.config.Conf
 import dev.eternal.config.impl.ServerConfig
 import dev.eternal.engine.Engine

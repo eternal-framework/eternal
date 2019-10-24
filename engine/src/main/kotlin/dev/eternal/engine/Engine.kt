@@ -3,10 +3,12 @@ package dev.eternal.engine
 import com.google.common.base.Stopwatch
 import dev.eternal.config.Conf
 import dev.eternal.config.impl.ServerConfig
+import dev.eternal.engine.service.ServiceManager
 import dev.eternal.util.Injectable
 import dev.eternal.util.PathConstants
 import dev.eternal.util.Server.logger
 import net.runelite.cache.fs.Store
+import org.koin.core.inject
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -33,12 +35,19 @@ class Engine : dev.eternal.api.Engine, Injectable {
     override val cachestore: Store = Store(File(PathConstants.CACHE_FOLDER_PATH))
 
     /**
+     * The service manager singleton.
+     */
+    val services: ServiceManager by inject()
+
+    /**
      * Initializes the engine.
      */
     fun init() {
         logger.info { "Initializing game engine." }
 
         this.loadCacheStore()
+
+        this.startServices()
 
         this.postInit()
     }
@@ -67,5 +76,18 @@ class Engine : dev.eternal.api.Engine, Injectable {
         cachestore.load()
         stopwatch.stop()
         logger.info { "Finished loading cache store in ${stopwatch.elapsed(TimeUnit.MILLISECONDS)}ms." }
+    }
+
+    /**
+     * Starts all the services in the [ServiceManager] store.
+     */
+    private fun startServices() {
+        logger.info { "Preparing to start services..." }
+
+        services.forEach { service ->
+            service.start()
+        }
+
+        logger.info { "Finished starting ${services.count()} services." }
     }
 }

@@ -12,7 +12,7 @@ import dev.eternal.util.PathConstants
  */
 class ServerConfig : AbstractConfig<Any>(PathConstants.SERVER_CONFIG_PATH, Companion) {
 
-    override val fileFormat: FileFormat get() = FileFormat.PROPERTIES
+    override val fileFormat: FileFormat get() = FileFormat.YAML
 
     override fun load(ctx: Any): Any { throw Exception("Loading contexts for ServerConfig not supported.") }
     override fun save(ctx: Any) { throw Exception ("Saving contexts for ServerConfig not supported.") }
@@ -21,6 +21,8 @@ class ServerConfig : AbstractConfig<Any>(PathConstants.SERVER_CONFIG_PATH, Compa
         val server_name by optional("Eternal RSPS", "server_name")
         val revision by optional(184, "revision")
         val debug by optional(true, "debug")
+        val login_threads by optional(3, "login_threads")
+        val auto_create_new_users by optional(true, "auto_create_new_users")
 
         /**
          * Network settings

@@ -24,7 +24,7 @@ interface Engine {
      */
     val cachestore: Store
 
-    /**
+    /*
      * Terminates the engine and therefor all other child interactions.
      */
     fun terminate()

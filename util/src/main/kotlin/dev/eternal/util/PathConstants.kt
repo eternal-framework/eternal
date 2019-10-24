@@ -10,7 +10,7 @@ object PathConstants {
     /**
      * The location of the main server config.
      */
-    const val SERVER_CONFIG_PATH = "data/config/server.properties"
+    const val SERVER_CONFIG_PATH = "data/config/server.yml"
 
     /**
      * The location of the cache data directory.
