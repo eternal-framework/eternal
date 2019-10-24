@@ -2,6 +2,7 @@ package dev.eternal.net.protocol.js5.codec
 
 import dev.eternal.engine.Engine
 import dev.eternal.net.StatusType
+import dev.eternal.net.protocol.js5.packet.JS5CacheRequest
 import dev.eternal.net.protocol.js5.packet.JS5RevisionRequest
 import dev.eternal.net.protocol.js5.packet.JS5StatusResponse
 import dev.eternal.net.session.Session
@@ -42,6 +43,13 @@ object JS5Handler : Injectable {
 
             true
         }
+    }
+
+    /**
+     * Processes the [JS5CacheRequest] packet.
+     */
+    fun handleCacheRequest(session: Session, request: JS5CacheRequest) {
+        println("Request: index=${request.index} archive=${request.archive}")
     }
 
 }

@@ -5,6 +5,7 @@ import dev.eternal.net.protocol.Protocol
 import dev.eternal.net.protocol.js5.codec.JS5Decoder
 import dev.eternal.net.protocol.js5.codec.JS5Encoder
 import dev.eternal.net.protocol.js5.codec.JS5Handler
+import dev.eternal.net.protocol.js5.packet.JS5CacheRequest
 import dev.eternal.net.protocol.js5.packet.JS5RevisionRequest
 import dev.eternal.net.protocol.js5.packet.JS5StatusResponse
 import dev.eternal.net.session.Session
@@ -42,16 +43,23 @@ class JS5Protocol : Protocol() {
         }
     }
 
+    /**
+     * Decodes inbound bytes
+     */
     override fun decode(session: Session, buf: ByteBuf, out: MutableList<Any>) {
         when(decoderState) {
             DecodeState.REVISION -> JS5Decoder.decodeRevisionRequest(buf, out)
-            DecodeState.CACHE -> JS5Decoder.decodeCacheRequest(session, buf, out)
+            DecodeState.CACHE -> JS5Decoder.decodeCacheRequest(buf, out)
         }
     }
 
+    /**
+     * Handles decoded packets
+     */
     override fun handle(session: Session, packet: Packet) {
         when(packet) {
             is JS5RevisionRequest -> if(JS5Handler.handleRevisionRequest(session, packet)) decoderState = DecodeState.CACHE
+            is JS5CacheRequest -> JS5Handler.handleCacheRequest(session, packet)
             else -> logger.warn { "Unhandled JS5Protocol packet ${packet::class.java.simpleName}." }
         }
     }
