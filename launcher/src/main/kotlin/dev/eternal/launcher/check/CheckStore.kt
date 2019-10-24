@@ -2,6 +2,7 @@ package dev.eternal.launcher.check
 
 import dev.eternal.launcher.check.impl.CacheCheck
 import dev.eternal.launcher.check.impl.DirectoryCheck
+import dev.eternal.launcher.check.impl.RSACheck
 import dev.eternal.launcher.check.impl.XteasCheck
 import dev.eternal.util.Server.logger
 import kotlin.system.exitProcess
@@ -22,6 +23,7 @@ class CheckStore {
         addCheck(DirectoryCheck())
         addCheck(CacheCheck())
         addCheck(XteasCheck())
+        addCheck(RSACheck())
     }
 
     /**

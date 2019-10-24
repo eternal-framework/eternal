@@ -3,8 +3,6 @@ package dev.eternal.engine.module.impl
 import dev.eternal.engine.module.Module
 import dev.eternal.util.PathConstants
 import dev.eternal.util.Server.logger
-import org.bouncycastle.asn1.pkcs.RSAPrivateKey
-import org.bouncycastle.asn1.pkcs.RSAPublicKey
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.util.io.pem.PemObject
 import org.bouncycastle.util.io.pem.PemReader
@@ -16,6 +14,8 @@ import java.nio.file.Paths
 import java.security.KeyFactory
 import java.security.KeyPairGenerator
 import java.security.Security
+import java.security.interfaces.RSAPrivateKey
+import java.security.interfaces.RSAPublicKey
 import java.security.spec.PKCS8EncodedKeySpec
 
 /**
