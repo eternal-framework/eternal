@@ -14,3 +14,16 @@ dependencies {
     compile project(':net')
     compile project(':api')
 }
+
+tasks.register("generate") {
+    group = "rsa"
+    description = "Generates a new private/public key pair."
+
+    doLast {
+        javaexec {
+            workingDir = rootProject.projectDir
+            classpath = sourceSets.main.runtimeClasspath
+            main = "dev.eternal.launcher.rsa.RSAGenerator"
+        }
+    }
+}
