@@ -68,6 +68,8 @@ allprojects {
             html.enabled false
         }
     }
+
+    check.dependsOn jacocoTestReport
 }
 
 dependencies {
