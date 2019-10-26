@@ -5,6 +5,7 @@ import dev.eternal.engine.module.impl.RSAModule
 import dev.eternal.net.StatusType
 import dev.eternal.net.protocol.login.LoginProtocol
 import dev.eternal.net.protocol.login.LoginType
+import dev.eternal.net.protocol.login.packet.LoginRequestPacket
 import dev.eternal.net.protocol.login.packet.LoginStatusResponse
 import dev.eternal.net.session.Session
 import dev.eternal.util.*
@@ -60,7 +61,7 @@ object LoginDecoder : Injectable {
     fun decodePayload(session: Session, buf: ByteBuf, out: MutableList<Any>) {
         var payloadLength = 0
 
-        val revision: Int
+        var revision: Int = -1
 
         var mobile = false
 
@@ -131,7 +132,7 @@ object LoginDecoder : Injectable {
                 return
             }
 
-            val authCode: Int
+            var authCode: Int = -1
             val password: String?
             val lastXteaKeys = IntArray(4)
 
@@ -228,6 +229,20 @@ object LoginDecoder : Injectable {
             /**
              * Login payload decode succeeded.
              */
+            val request = LoginRequestPacket(
+                session = session,
+                reconnecting = (session.provider.current as LoginProtocol).isReconnecting(),
+                username = username,
+                password = password ?: "",
+                revision = revision,
+                authCode = authCode,
+                mobile = mobile,
+                clientResizable = clientResizable,
+                clientWidth = clientWidth,
+                clientHeight = clientHeight
+            )
+
+            out.add(request)
         }
     }
 
