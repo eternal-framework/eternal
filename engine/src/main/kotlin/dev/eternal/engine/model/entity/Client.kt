@@ -1,6 +1,6 @@
 package dev.eternal.engine.model.entity
 
-import io.netty.channel.Channel
+import io.netty.channel.ChannelHandlerContext
 
 /**
  * Represents a connected remote client in the game.
@@ -8,7 +8,7 @@ import io.netty.channel.Channel
  * @author Cody Fullen
  */
 class Client(
-    val channel: Channel,
+    private val ctx: ChannelHandlerContext,
     val username: String,
     val passwordHash: String
 ) : Player() {
