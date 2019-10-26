@@ -4,6 +4,8 @@ import dev.eternal.engine.net.Packet
 import dev.eternal.net.protocol.Protocol
 import dev.eternal.net.protocol.login.codec.LoginDecoder
 import dev.eternal.net.protocol.login.codec.LoginEncoder
+import dev.eternal.net.protocol.login.codec.LoginHandler
+import dev.eternal.net.protocol.login.packet.LoginRequestPacket
 import dev.eternal.net.protocol.login.packet.LoginStatusResponse
 import dev.eternal.net.session.Session
 import dev.eternal.util.Server.logger
@@ -53,7 +55,9 @@ class LoginProtocol : Protocol() {
      * Handles decoded packets.
      */
     override fun handle(session: Session, packet: Packet) {
-
+        if(packet is LoginRequestPacket) {
+            LoginHandler.handleLoginRequest(session, packet)
+        }
     }
 
     /**
