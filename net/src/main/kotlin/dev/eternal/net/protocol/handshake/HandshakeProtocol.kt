@@ -1,6 +1,7 @@
 package dev.eternal.net.protocol.handshake
 
 import dev.eternal.engine.net.Packet
+import dev.eternal.net.StatusType
 import dev.eternal.net.protocol.Protocol
 import dev.eternal.net.protocol.ProtocolProvider
 import dev.eternal.net.session.Session
@@ -60,7 +61,15 @@ class HandshakeProtocol : Protocol() {
                     session.provider.setProtocol(ProtocolProvider.Type.JS5)
                 }
 
-                HandshakeType.LOGIN -> {}
+                /**
+                 * When the handshake is Login,
+                 * We need to change the curent session protocol as well as send two things.
+                 * 0 -> byte to tell the client the handshake was processed
+                 */
+                HandshakeType.LOGIN -> {
+                    session.provider.setProtocol(ProtocolProvider.Type.LOGIN)
+                    session.ctx.writeAndFlush(session.ctx.alloc().buffer(1).writeByte(StatusType.ACCEPTABLE.id))
+                }
 
             }
 

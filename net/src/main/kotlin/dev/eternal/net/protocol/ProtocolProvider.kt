@@ -2,6 +2,7 @@ package dev.eternal.net.protocol
 
 import dev.eternal.net.protocol.handshake.HandshakeProtocol
 import dev.eternal.net.protocol.js5.JS5Protocol
+import dev.eternal.net.protocol.login.LoginProtocol
 import dev.eternal.net.session.Session
 import dev.eternal.util.Injectable
 
@@ -35,7 +36,8 @@ class ProtocolProvider(val session: Session) : Injectable {
     enum class Type(val protocol: Protocol) {
 
         HANDSHAKE(HandshakeProtocol()),
-        JS5(JS5Protocol())
+        JS5(JS5Protocol()),
+        LOGIN(LoginProtocol())
 
     }
 }

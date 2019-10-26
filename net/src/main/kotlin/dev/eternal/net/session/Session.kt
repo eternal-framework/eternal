@@ -43,6 +43,10 @@ class Session(val ctx: ChannelHandlerContext) : Injectable {
      */
     internal val provider: ProtocolProvider by inject { parametersOf(this) }
 
+    /**
+     * The current randomized seed of the session
+     */
+    internal var seed: Long = -1L
 
     /**
      * Invoked when the session first connects.
