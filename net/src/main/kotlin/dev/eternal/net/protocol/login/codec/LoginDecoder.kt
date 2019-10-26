@@ -7,11 +7,8 @@ import dev.eternal.net.protocol.login.LoginProtocol
 import dev.eternal.net.protocol.login.LoginType
 import dev.eternal.net.protocol.login.packet.LoginStatusResponse
 import dev.eternal.net.session.Session
-import dev.eternal.util.Injectable
+import dev.eternal.util.*
 import dev.eternal.util.Server.logger
-import dev.eternal.util.Xtea
-import dev.eternal.util.readString0CP1252
-import dev.eternal.util.readStringCP1252
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import io.netty.channel.ChannelFutureListener
@@ -41,7 +38,6 @@ object LoginDecoder : Injectable {
 
         try {
             val opcode = buf.readByte().toInt()
-
             val loginType = LoginType.values.firstOrNull { it.opcode == opcode } ?: throw IllegalStateException("Unhandled login type opcode $opcode")
 
             (session.provider.current as LoginProtocol).loginType = loginType
@@ -66,6 +62,8 @@ object LoginDecoder : Injectable {
 
         val revision: Int
 
+        var mobile = false
+
         /**
          * Decode the payload header information
          */
@@ -73,7 +71,9 @@ object LoginDecoder : Injectable {
         if(buf.readableBytes() >= length) {
             revision = buf.readInt()
 
-            buf.skipBytes(Int.SIZE_BYTES + Byte.SIZE_BYTES)
+            buf.skipBytes(Int.SIZE_BYTES)
+
+            mobile = (buf.readByte().toInt() == 2)
 
             /**
              * Check the clients revision.
@@ -132,28 +132,36 @@ object LoginDecoder : Injectable {
             }
 
             val authCode: Int
-            var password: String? = null
+            val password: String?
             val lastXteaKeys = IntArray(4)
 
             if((session.provider.current as LoginProtocol).isReconnecting()) {
-                val type = secureBuf.readByte().toInt()
+                for(i in 0 until 4) {
+                    lastXteaKeys[i] = secureBuf.readInt()
+                }
 
+                authCode = -1
+                password = null
+            } else {
+                val type = secureBuf.readByte().toInt()
                 when(type) {
-                    0, 2 -> {
+                    1 -> {
                         authCode = secureBuf.readUnsignedMedium()
                         secureBuf.skipBytes(Byte.SIZE_BYTES)
                     }
+
+                    2 -> secureBuf.skipBytes(Int.SIZE_BYTES)
 
                     else -> authCode = secureBuf.readInt()
                 }
 
                 secureBuf.skipBytes(Byte.SIZE_BYTES)
-                password = secureBuf.readStringCP1252()
+                password = secureBuf.readString()
             }
 
             val xteaBuf = buf.xteaDecipher(xteaKeys)
 
-            val username = xteaBuf.readStringCP1252()
+            val username = xteaBuf.readString()
 
             /**
              * Client settings definitions
@@ -163,31 +171,36 @@ object LoginDecoder : Injectable {
             val clientHeight = xteaBuf.readUnsignedShort()
 
             /**
-             * Tomm0017's code
-             * Skips the unused machine info data.
-             * Defined in the PlatformInfo class in runelite client.
+             * Skip the random.dat data.
              */
-            xteaBuf.skipBytes(24) // random.dat data
-            xteaBuf.readStringCP1252()
+            xteaBuf.skipBytes(24)
+
+            xteaBuf.readString()
             xteaBuf.skipBytes(Int.SIZE_BYTES)
 
-            xteaBuf.skipBytes(Byte.SIZE_BYTES * 10)
-            xteaBuf.skipBytes(Short.SIZE_BYTES)
-            xteaBuf.skipBytes(Byte.SIZE_BYTES)
+            /**
+             * Skip PlatformInfo data
+             * This is just information about the client's machine.
+             */
             xteaBuf.skipBytes(Byte.SIZE_BYTES * 3)
             xteaBuf.skipBytes(Short.SIZE_BYTES)
-            xteaBuf.readString0CP1252()
-            xteaBuf.readString0CP1252()
-            xteaBuf.readString0CP1252()
-            xteaBuf.readString0CP1252()
+            xteaBuf.skipBytes(Byte.SIZE_BYTES * 5)
+            xteaBuf.skipBytes(Short.SIZE_BYTES)
+            xteaBuf.skipBytes(Byte.SIZE_BYTES)
+            xteaBuf.readUnsignedMedium()
+            xteaBuf.skipBytes(Short.SIZE_BYTES)
+            xteaBuf.readJagexString()
+            xteaBuf.readJagexString()
+            xteaBuf.readJagexString()
+            xteaBuf.readJagexString()
             xteaBuf.skipBytes(Byte.SIZE_BYTES)
             xteaBuf.skipBytes(Short.SIZE_BYTES)
-            xteaBuf.readString0CP1252()
-            xteaBuf.readString0CP1252()
+            xteaBuf.readJagexString()
+            xteaBuf.readJagexString()
             xteaBuf.skipBytes(Byte.SIZE_BYTES * 2)
             xteaBuf.skipBytes(Int.SIZE_BYTES * 3)
             xteaBuf.skipBytes(Int.SIZE_BYTES)
-            xteaBuf.readString0CP1252()
+            xteaBuf.readJagexString()
 
             xteaBuf.skipBytes(Int.SIZE_BYTES * 3)
 
@@ -198,9 +211,8 @@ object LoginDecoder : Injectable {
             val serverCacheCrcs = engine.cachestore.indexes.map { it.crc }.toIntArray()
             val clientCacheCrcs = IntArray(serverCacheCrcs.size) { xteaBuf.readInt() }
 
-            for(i in 0 until clientCacheCrcs.size) {
+            for(i in 0 until serverCacheCrcs.size) {
                 if(i == 16) continue
-
                 if(clientCacheCrcs[i] != serverCacheCrcs[i]) {
                     logger.info { "Login request for username $username rejected due to cache CRC mismatch." }
 
@@ -216,7 +228,6 @@ object LoginDecoder : Injectable {
             /**
              * Login payload decode succeeded.
              */
-            println("Received login : username=$username password=${password!!}")
         }
     }
 
