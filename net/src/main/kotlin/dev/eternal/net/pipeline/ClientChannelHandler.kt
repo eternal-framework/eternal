@@ -4,6 +4,7 @@ import dev.eternal.engine.net.Packet
 import dev.eternal.net.NetworkServer
 import dev.eternal.net.session.Session
 import dev.eternal.util.Server.logger
+import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
 import java.util.concurrent.atomic.AtomicReference
@@ -13,6 +14,7 @@ import java.util.concurrent.atomic.AtomicReference
  *
  * @author Cody Fullen
  */
+@ChannelHandler.Sharable
 class ClientChannelHandler(private val networkServer: NetworkServer) : ChannelInboundHandlerAdapter() {
 
     /**

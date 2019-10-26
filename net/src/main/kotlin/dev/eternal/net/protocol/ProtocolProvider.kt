@@ -5,6 +5,9 @@ import dev.eternal.net.protocol.js5.JS5Protocol
 import dev.eternal.net.protocol.login.LoginProtocol
 import dev.eternal.net.session.Session
 import dev.eternal.util.Injectable
+import org.koin.core.get
+import org.koin.core.inject
+import java.lang.IllegalArgumentException
 
 /**
  * A session dependent store of [Protocol]s
@@ -22,7 +25,7 @@ class ProtocolProvider(val session: Session) : Injectable {
     /**
      * Gets the current session protocol.
      */
-    val current: Protocol get() = this.protocol.protocol
+    var current: Protocol = this.update()
 
     /**
      * Changes the session protocol.
@@ -31,13 +34,24 @@ class ProtocolProvider(val session: Session) : Injectable {
      */
     fun setProtocol(type: Type) {
         this.protocol = type
+        this.current = this.update()
     }
 
-    enum class Type(val protocol: Protocol) {
+    /**
+     * Updates and returns a new instance of the current protocol type.
+     */
+    private fun update(): Protocol {
+        return when(protocol) {
+            Type.HANDSHAKE -> get<HandshakeProtocol>()
+            Type.JS5 -> get<JS5Protocol>()
+            Type.LOGIN -> get<LoginProtocol>()
+        }
+    }
 
-        HANDSHAKE(HandshakeProtocol()),
-        JS5(JS5Protocol()),
-        LOGIN(LoginProtocol())
+    enum class Type {
 
+        HANDSHAKE,
+        JS5,
+        LOGIN;
     }
 }

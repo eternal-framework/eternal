@@ -109,7 +109,6 @@ class NetworkServer(override val address: InetSocketAddress) : SocketServer(addr
      * @param session The [Session] instance to remove.
      */
     internal fun terminateSession(session: Session) {
-        session.close()
         activeSessions.remove(session)
     }
 

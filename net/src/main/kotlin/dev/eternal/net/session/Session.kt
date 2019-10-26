@@ -67,6 +67,7 @@ class Session(val ctx: ChannelHandlerContext) : Injectable {
      */
     internal fun onDisconnect() {
         networkServer.terminateSession(this)
+        this.close()
     }
 
     /**
@@ -97,9 +98,7 @@ class Session(val ctx: ChannelHandlerContext) : Injectable {
      * Closes the session channel.
      */
     fun close() {
-        if(channel.isActive) {
-            channel.close()
-        }
+        ctx.channel().close()
     }
 
     /**

@@ -8,7 +8,7 @@ import io.netty.channel.ChannelHandlerContext
  * @author Cody Fullen
  */
 class Client(
-    private val ctx: ChannelHandlerContext,
+    val ctx: ChannelHandlerContext,
     val username: String,
     val passwordHash: String
 ) : Player() {
