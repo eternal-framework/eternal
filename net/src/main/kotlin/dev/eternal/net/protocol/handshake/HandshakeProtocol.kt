@@ -64,11 +64,13 @@ class HandshakeProtocol : Protocol() {
                 /**
                  * When the handshake is Login,
                  * We need to change the curent session protocol as well as send two things.
-                 * 0 -> byte to tell the client the handshake was processed
+                 * The status type acceptable
+                 * The randomized client seed.
                  */
                 HandshakeType.LOGIN -> {
                     session.provider.setProtocol(ProtocolProvider.Type.LOGIN)
                     session.ctx.writeAndFlush(session.ctx.alloc().buffer(1).writeByte(StatusType.ACCEPTABLE.id))
+                    session.ctx.writeAndFlush(session.ctx.alloc().buffer(8).writeLong(session.seed))
                 }
 
             }

@@ -46,7 +46,7 @@ class Session(val ctx: ChannelHandlerContext) : Injectable {
     /**
      * The current randomized seed of the session
      */
-    internal var seed: Long = -1L
+    internal var seed: Long = (Math.random() * Long.MAX_VALUE).toLong()
 
     /**
      * Invoked when the session first connects.
